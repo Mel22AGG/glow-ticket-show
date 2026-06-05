@@ -55,8 +55,7 @@ const AuthScreen = () => {
     }
   };
 
-  return (
-    <div className="min-h-screen flex flex-col px-6 py-10 safe-top safe-bottom gradient-mesh">
+  return (<div className="min-h-screen flex flex-col justify-center px-6 gradient-mesh">
       <div className="flex flex-col items-center mb-8 animate-fade-in">
         <div className="w-20 h-20 rounded-3xl gradient-primary flex items-center justify-center shadow-xl animate-pulse-glow">
           <Sparkles className="w-10 h-10 text-primary-foreground" />

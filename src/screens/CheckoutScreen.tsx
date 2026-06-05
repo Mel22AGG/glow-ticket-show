@@ -101,8 +101,6 @@ const CheckoutScreen = ({ event, section, quantity, total, onBack, onComplete }:
         <div className="flex flex-col gap-2">
           {[
             { id: "card", label: "Tarjeta de crédito/débito", icon: "💳" },
-            { id: "paypal", label: "PayPal", icon: "🅿️" },
-            { id: "transfer", label: "Transferencia bancaria", icon: "🏦" },
           ].map((method) => (
             <button
               key={method.id}
