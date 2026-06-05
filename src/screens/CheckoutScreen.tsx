@@ -19,12 +19,98 @@ const CheckoutScreen = ({ event, section, quantity, total, onBack, onComplete }:
   const [paymentMethod, setPaymentMethod] = useState("card");
   const [processing, setProcessing] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [cardNumber, setCardNumber] = useState("");
+  const [expiry, setExpiry] = useState("");
+  const [cvv, setCvv] = useState("");
   const { purchase } = useTickets();
 
   const serviceFee = Math.round(total * 0.1);
   const grandTotal = total + serviceFee;
 
+  const handleCardNumberChange = (value: string) => {
+    const cleaned = value.replace(/\D/g, "");
+
+    const formatted = cleaned
+      .slice(0, 16)
+      .replace(/(\d{4})(?=\d)/g, "$1 ");
+
+    setCardNumber(formatted);
+  };
+
+  const handleExpiryChange = (value: string) => {
+    const cleaned = value.replace(/\D/g, "");
+
+    if (cleaned.length <= 2) {
+      setExpiry(cleaned);
+      return;
+    }
+
+    setExpiry(
+      cleaned.slice(0, 2) +
+      "/" +
+      cleaned.slice(2, 4)
+    );
+  };
+
+  const handleCVVChange = (value: string) => {
+    const cleaned = value.replace(/\D/g, "");
+    setCvv(cleaned.slice(0, 3));
+  };
+
   const handlePurchase = async () => {
+    if (cardNumber.replace(/\s/g, "").length !== 16) {
+  toast({
+    title: "Tarjeta inválida",
+    description: "La tarjeta debe tener 16 dígitos",
+    variant: "destructive",
+  });
+  return;
+}
+
+if (expiry.length !== 5) {
+  toast({
+    title: "Fecha inválida",
+    description: "Ingrese una fecha válida MM/AA",
+    variant: "destructive",
+  });
+  return;
+}
+
+const month = parseInt(expiry.split("/")[0]);
+const year = parseInt(expiry.split("/")[1]);
+
+const currentDate = new Date();
+const currentMonth = currentDate.getMonth() + 1;
+const currentYear = currentDate.getFullYear() % 100;
+
+if (
+  year < currentYear ||
+  (year === currentYear && month < currentMonth)
+) {
+  toast({
+    title: "Tarjeta vencida",
+    description: "La fecha de vencimiento ya expiró",
+    variant: "destructive",
+  });
+  return;
+}
+    if (month < 1 || month > 12) {
+      toast({
+        title: "Mes inválido",
+        description: "El mes debe estar entre 01 y 12",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (cvv.length !== 3) {
+      toast({
+        title: "CVV inválido",
+        description: "El CVV debe tener 3 dígitos",
+        variant: "destructive",
+      });
+      return;
+    }
     setProcessing(true);
     try {
       await purchase(event, section, quantity, grandTotal);
@@ -127,6 +213,9 @@ const CheckoutScreen = ({ event, section, quantity, total, onBack, onComplete }:
               <label className="text-xs font-medium text-muted-foreground">Número de tarjeta</label>
               <input
                 type="text"
+                inputMode="numeric"
+                value={cardNumber}
+                onChange={(e) => handleCardNumberChange(e.target.value)}
                 placeholder="1234 5678 9012 3456"
                 className="w-full mt-1 px-3 py-2.5 rounded-xl bg-muted text-foreground text-sm border border-border focus:border-primary focus:outline-none transition-colors"
               />
@@ -136,6 +225,9 @@ const CheckoutScreen = ({ event, section, quantity, total, onBack, onComplete }:
                 <label className="text-xs font-medium text-muted-foreground">Vencimiento</label>
                 <input
                   type="text"
+                  inputMode="numeric"
+                  value={expiry}
+                  onChange={(e) => handleExpiryChange(e.target.value)}
                   placeholder="MM/AA"
                   className="w-full mt-1 px-3 py-2.5 rounded-xl bg-muted text-foreground text-sm border border-border focus:border-primary focus:outline-none transition-colors"
                 />
@@ -144,6 +236,9 @@ const CheckoutScreen = ({ event, section, quantity, total, onBack, onComplete }:
                 <label className="text-xs font-medium text-muted-foreground">CVV</label>
                 <input
                   type="text"
+                  inputMode="numeric"
+                  value={cvv}
+                  onChange={(e) => handleCVVChange(e.target.value)}
                   placeholder="123"
                   className="w-full mt-1 px-3 py-2.5 rounded-xl bg-muted text-foreground text-sm border border-border focus:border-primary focus:outline-none transition-colors"
                 />
