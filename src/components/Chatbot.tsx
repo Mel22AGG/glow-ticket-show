@@ -190,7 +190,7 @@ const Chatbot = () => {
                 e.preventDefault();
                 send(input);
               }}
-              className="p-3 flex gap-2 border-t border-border/50 bg-background/90 backdrop-blur-sm safe-bottom"
+                className="p-3 mb-4 flex gap-2 border-t border-border/50 bg-background/90 backdrop-blur-sm safe-bottom"
             >
               <input
                 value={input}
