@@ -25,8 +25,8 @@ const BottomNav = ({ activeTab, onTabChange, showAdmin }: BottomNavProps) => {
       aria-label="Navegación principal"
       className="fixed bottom-0 left-0 right-0 z-40 max-w-md mx-auto pointer-events-none"
     >
-      <div className="pointer-events-auto mx-2 mb-2 rounded-2xl bg-card/95 backdrop-blur-xl border border-border shadow-2xl safe-bottom">
-        <div className="flex items-stretch justify-around px-3 pt-2 pb-2 gap-1">
+      <div className="pointer-events-auto mx-auto mb-2 w-full max-w-md rounded-2xl bg-card/95 backdrop-blur-xl border border-border shadow-2xl safe-bottom">
+        <div className="flex items-stretch justify-around px-3 pt-2 pb-2 gap-1 overflow-hidden">
           {tabs.map((tab) => {
             const isActive = activeTab === tab.id;
             return (
@@ -36,7 +36,7 @@ const BottomNav = ({ activeTab, onTabChange, showAdmin }: BottomNavProps) => {
                 aria-label={tab.label}
                 aria-current={isActive ? "page" : undefined}
                 className={cn(
-                  "relative flex-1 flex flex-col items-center justify-center gap-0.5 min-h-[52px] rounded-xl px-1 py-1.5 transition-all duration-200",
+                  "relative w-[72px] shrink-0 flex flex-col items-center justify-center gap-0.5 h-[56px] rounded-xl px-1 py-1.5 transition-all duration-200",
                   "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
                   isActive
                     ? "bg-primary/12 text-primary"
@@ -50,11 +50,11 @@ const BottomNav = ({ activeTab, onTabChange, showAdmin }: BottomNavProps) => {
                   />
                 )}
                 <tab.icon
-                  className={cn("transition-all", isActive ? "w-[22px] h-[22px]" : "w-[20px] h-[20px]")}
+                  className={cn("transition-all", isActive ? "w-[22px] h-[22px] shrink-0" : "w-[20px] h-[20px] shrink-0")}
                   fill={isActive ? "currentColor" : "none"}
                   strokeWidth={isActive ? 2.4 : 2}
                 />
-                <span className={cn("text-[9.5px] leading-none tracking-tight", isActive ? "font-bold" : "font-medium")}>
+                <span className={cn("text-[10px] leading-none whitespace-nowrap", isActive ? "font-bold" : "font-medium")}>
                   {tab.label}
                 </span>
               </button>
